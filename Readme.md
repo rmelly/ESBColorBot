@@ -2,9 +2,9 @@
 @ESBColorBot is a bot that tweets out the lighting color of the Empire State Building. It is also intended to be a base and framework for building bots with more interesting utility.
 
 @ESBColorBot has 3 main functional components:
-1) update_database() - Scapes the ESB lighting calendar and dumps results into a PostgreSQL. This database can then be used for other services.
-2) make_tweet() - attempts to find relevant users and hashtags on Twitter to attach to the description of the lighting. Several NLP and entity extraction APIs were tested for this function with disappointing results. Current implementation uses a Google CustomSearch (https://developers.google.com/custom-search/) pointed at twitter.com. Relevance of the suggestions will be evaluated over time. 
-3) tweeter() - tweets the days ESB lighting description.
+- update_database() - Scapes the ESB lighting calendar and dumps results into a PostgreSQL. This database can then be used for other services.
+- make_tweet() - attempts to find relevant users and hashtags on Twitter to attach to the description of the lighting. Several NLP and entity extraction APIs were tested for this function with disappointing results. Current implementation uses a Google CustomSearch (https://developers.google.com/custom-search/) pointed at twitter.com. Relevance of the suggestions will be evaluated over time. 
+- tweeter() - tweets the days ESB lighting description.
 
 # References
 This bot was inspired by:
