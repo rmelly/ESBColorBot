@@ -1,0 +1,33 @@
+*.so
+*.py[cod]
+.Python
+.DS_Store
+env/
+bin/
+build/
+dist/
+eggs/
+parts/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Vagrant machines folder
+.vagrant/
+
+# Redis dump files
+dump.rdb
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+coverage.xml
+
+# Sphinx documentation
+docs/_build/
+
+# Config variables
+instance/config.py
