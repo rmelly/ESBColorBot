@@ -1,5 +1,6 @@
 *.so
 *.py[cod]
+*.pem
 .Python
 .DS_Store
 env/

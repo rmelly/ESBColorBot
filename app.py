@@ -19,6 +19,8 @@ import atexit
 
 import tweepy
 from googleapiclient import discovery
+import logging
+logging.basicConfig()
 
 
 ##########################
@@ -148,9 +150,12 @@ def update_database():
 
 @cron.scheduled_job('interval', seconds=60*60*24)
 def tweeter():
-    today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
-    today_tweet = ESBLightState.query.filter_by(date=today_date).first().tweet
-    api.update_status(today_tweet)
+    try:
+        today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
+        today_tweet = ESBLightState.query.filter_by(date=today_date).first().tweet
+        api.update_status(today_tweet)
+    except:
+        pass
 
 # Shutdown your cron thread if the web process is stopped
 atexit.register(lambda: cron.shutdown(wait=False))
