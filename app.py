@@ -1,25 +1,39 @@
-import os, sys
-import requests
-import re
-import json
+# Including all this stuff for copypasta - we'll need it later
 
-from flask import Flask
+# Basic system operations
+import os, sys
+
+# Basic HTML operations
+import requests, json
+
+# HTML scraping
 from bs4 import BeautifulSoup
 
+# Regex
+import re
+
+# Flask framework
+from flask import Flask
+
+# PostgreSQL support
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy import Table, Column, Integer
+from sqlalchemy import Table, Column, Integer, Boolean
 from sqlalchemy import DateTime
 
+# Time format handling
 import time, datetime
 from datetime import datetime, timedelta
 
+# Task scheduling
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
+import logging
 
+# Service APIs
 import tweepy
 from googleapiclient import discovery
-import logging
+
 logging.basicConfig()
 
 
@@ -71,6 +85,7 @@ class ESBLightState(db.Model):
     date = db.Column(db.Unicode(255), server_default=u'')
     description = db.Column(db.Unicode(255), server_default=u'')
     tweet = db.Column(db.Unicode(255), server_default=u'')
+    tweeted = db.Column(db.Boolean,server_default=u'false')
 
 ##########################
 ##### Start App ##########
@@ -148,14 +163,21 @@ def update_database():
             exists.tweet = tweet
     db.session.commit()
 
-@cron.scheduled_job('interval', seconds=60*60*24)
+@cron.scheduled_job('interval', seconds=30)
 def tweeter():
-    try:
-        today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
-        today_tweet = ESBLightState.query.filter_by(date=today_date).first().tweet
-        api.update_status(today_tweet)
-    except:
-        pass
+
+    print 'here'
+    today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
+    today_item = ESBLightState.query.filter_by(date=today_date).first()
+    print 'gere'
+    print today_item.tweeted
+    print not today_item.tweeted
+    if not today_item.tweeted:
+        print 'gdsfd'
+        api.update_status(today_item.tweet)
+        today_item.tweeted = True
+        db.session.commit()
+
 
 # Shutdown your cron thread if the web process is stopped
 atexit.register(lambda: cron.shutdown(wait=False))
