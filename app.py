@@ -165,15 +165,9 @@ def update_database():
 
 @cron.scheduled_job('interval', seconds=30)
 def tweeter():
-
-    print 'here'
     today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
     today_item = ESBLightState.query.filter_by(date=today_date).first()
-    print 'gere'
-    print today_item.tweeted
-    print not today_item.tweeted
     if not today_item.tweeted:
-        print 'gdsfd'
         api.update_status(today_item.tweet)
         today_item.tweeted = True
         db.session.commit()
