@@ -163,14 +163,18 @@ def update_database():
             exists.tweet = tweet
     db.session.commit()
 
-@cron.scheduled_job('interval', seconds=30)
+@cron.scheduled_job('interval', seconds=60*60*8)
 def tweeter():
     today_date = unicode(datetime.strftime(datetime.now(),'%Y-%m-%d'))
     today_item = ESBLightState.query.filter_by(date=today_date).first()
-    if not today_item.tweeted:
-        api.update_status(today_item.tweet)
-        today_item.tweeted = True
-        db.session.commit()
+
+    if today_item is None:
+        update_database()
+    else:
+        if not today_item.tweeted:
+            api.update_status(today_item.tweet)
+            today_item.tweeted = True
+            db.session.commit()
 
 
 # Shutdown your cron thread if the web process is stopped
